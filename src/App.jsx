@@ -4,6 +4,7 @@ import Home from './components/Home'
 import Lookup from './components/Lookup'
 import Flow from './components/Flow'
 import Summary from './components/Summary'
+import { APP_COPY, TABLES_COPY } from './content/copy'
 
 const initial = { view: 'home', step: 0, slots: {}, lookup: null }
 const id = (n, k) => n + '.' + k
@@ -24,8 +25,8 @@ function reducer(s, a) {
     case 'manual': {
       const k = id(a.stepN, a.slot.k)
       const prev = s.slots[k] || { hist: [] }
-      const cur = { source: 'manual', num: '填', plain: a.text, _t: a.ts }
-      const hist = [{ num: '填', plain: a.text, source: 'manual', ts: a.ts }, ...prev.hist]
+      const cur = { source: 'manual', num: TABLES_COPY.result.manualNum, plain: a.text, _t: a.ts }
+      const hist = [{ num: TABLES_COPY.result.manualNum, plain: a.text, source: 'manual', ts: a.ts }, ...prev.hist]
       return { ...s, slots: { ...s.slots, [k]: { cur, hist } } }
     }
     case 'readopt': {
@@ -70,23 +71,23 @@ export default function App() {
   const onStep = step => dispatch({ type: 'step', step })
 
   const folio = {
-    home: '第零场 · 工具',
-    lookup: '速查 · 10 张表',
-    flow: `第 ${STEPS[state.step].n} / ${STEPS.length} 栏`,
-    summary: '结账 · 友谊账单',
+    home: APP_COPY.folio.home,
+    lookup: APP_COPY.folio.lookup,
+    flow: APP_COPY.folio.flow(STEPS[state.step], STEPS.length),
+    summary: APP_COPY.folio.summary,
   }[state.view]
 
   return (
     <div className="book"><div className="book-inner"><div className="page">
       <header className="mast">
         <div>
-          <div className="brand">Greedy Gorgon Press · Fables in Tables</div>
+          <div className="brand">{APP_COPY.brand}</div>
           <h1 className="title" onClick={() => onView('home')} role="button" tabIndex={0}
-            onKeyDown={e => e.key === 'Enter' && onView('home')} style={{ cursor: 'pointer' }}>你是我的好朋友</h1>
-          <div className="sub">开团前的羁绊账簿</div>
+            onKeyDown={e => e.key === 'Enter' && onView('home')} style={{ cursor: 'pointer' }}>{APP_COPY.title}</h1>
+          <div className="sub">{APP_COPY.subtitle}</div>
         </div>
         <div className="folio">
-          {state.view !== 'home' && <button className="lnk" onClick={() => onView('home')}>← 回封面</button>}
+          {state.view !== 'home' && <button className="lnk" onClick={() => onView('home')}>{APP_COPY.backHome}</button>}
           <div>{folio}</div>
         </div>
       </header>

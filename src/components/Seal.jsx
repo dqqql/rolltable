@@ -1,5 +1,7 @@
+import { SEAL_COPY } from '../content/copy'
+
 // 封蜡骰印 —— 全站签名元素
-export default function Seal({ res, size = 96, empty, mini, stamp, emptyLabel = '？' }) {
+export default function Seal({ res, size = 96, empty, mini, stamp, emptyLabel = SEAL_COPY.emptyLabel }) {
   const style = { '--sz': size + 'px' }
   if (empty || !res) {
     return (

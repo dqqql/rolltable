@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { LOOKUP, DATA } from '../lib/tables'
+import { LOOKUP_UI_COPY } from '../content/copy'
 import TableView from './TableView'
 
 // 表格速查：卡片墙 + 点开的「跳转窗口」(modal)，不再把所有表塞进一页
@@ -8,16 +9,16 @@ export default function Lookup({ open, onOpen, onClose }) {
 
   return (
     <section className="lk">
-      <p className="lk-hint">十张随机表，点开任意一张单独查阅。</p>
+      <p className="lk-hint">{LOOKUP_UI_COPY.hint}</p>
       <div className="lk-cards">
         {LOOKUP.map(c => {
           const count = c.subs.reduce((s, x) => s + DATA[x.t].length, 0)
           return (
             <button className="lk-card" key={c.no} onClick={() => onOpen(c.no)}>
-              <div className="lk-no">No.{c.no}</div>
+              <div className="lk-no">{LOOKUP_UI_COPY.number(c.no)}</div>
               <div className="lk-name">{c.name}</div>
               <div className="lk-q">{c.q}</div>
-              <div className="lk-foot"><span className="die">{c.die}</span><span className="cnt">{count} 条 →</span></div>
+              <div className="lk-foot"><span className="die">{c.die}</span><span className="cnt">{LOOKUP_UI_COPY.count(count)}</span></div>
             </button>
           )
         })}
@@ -40,11 +41,11 @@ function TableModal({ card, onClose }) {
       <div className="modal" role="dialog" aria-modal="true" aria-label={card.name} onClick={e => e.stopPropagation()}>
         <header className="modal-head">
           <div>
-            <span className="no">No.{card.no}</span>
+            <span className="no">{LOOKUP_UI_COPY.number(card.no)}</span>
             <h3>{card.name}</h3>
             <span className="modal-q">{card.q}</span>
           </div>
-          <button className="modal-x" onClick={onClose} aria-label="关闭">✕</button>
+          <button className="modal-x" onClick={onClose} aria-label={LOOKUP_UI_COPY.closeAria}>✕</button>
         </header>
         <div className="modal-body">
           {card.subs.map((sub, i) => (

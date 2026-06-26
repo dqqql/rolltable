@@ -1,4 +1,5 @@
 import { DATA } from '../lib/tables'
+import { TABLE_VIEW_COPY } from '../content/copy'
 
 // 单张随机表的排版（速查窗口与流程内复用）
 export default function TableView({ t, kind, label }) {
@@ -16,7 +17,10 @@ export default function TableView({ t, kind, label }) {
 function NickRows({ arr }) {
   return (
     <div className="nick-tbl">
-      <div className="h pt">#</div><div className="h">词组 1</div><div className="h">词组 2</div><div className="h">词组 3</div>
+      <div className="h pt">{TABLE_VIEW_COPY.nicknameHeaders[0]}</div>
+      <div className="h">{TABLE_VIEW_COPY.nicknameHeaders[1]}</div>
+      <div className="h">{TABLE_VIEW_COPY.nicknameHeaders[2]}</div>
+      <div className="h">{TABLE_VIEW_COPY.nicknameHeaders[3]}</div>
       {arr.map((r, i) => (
         <Fragment3 key={i} i={i + 1} a={r.a} b={r.b} c={r.c} />
       ))}
