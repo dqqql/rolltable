@@ -1,5 +1,5 @@
 import { useReducer, useCallback } from 'react'
-import { STEPS, roll } from './lib/tables'
+import { STEPS, roll, rerollNicknameWord, manualNicknameWord } from './lib/tables'
 import Home from './components/Home'
 import Lookup from './components/Lookup'
 import Flow from './components/Flow'
@@ -19,7 +19,7 @@ function reducer(s, a) {
       const k = id(a.stepN, a.slot.k)
       const prev = s.slots[k] || { hist: [] }
       const cur = { ...a.res, _t: a.ts }
-      const hist = [{ num: a.res.sealNum ?? a.res.num, plain: a.res.plain, source: 'draw', ts: a.ts }, ...prev.hist]
+      const hist = [{ num: a.res.sealNum ?? a.res.num, plain: a.res.plain, source: 'draw', ts: a.ts, ...(a.res.segments ? { segments: a.res.segments } : {}) }, ...prev.hist]
       return { ...s, slots: { ...s.slots, [k]: { cur, hist } } }
     }
     case 'manual': {
@@ -34,6 +34,22 @@ function reducer(s, a) {
       const prev = s.slots[k]; if (!prev) return s
       return { ...s, slots: { ...s.slots, [k]: { ...prev, cur: a.res } } }
     }
+    case 'rerollWord': {
+      const k = id(a.stepN, a.slot.k)
+      const prev = s.slots[k] || { hist: [] }
+      if (a.slot.kind !== 'nickname') return s
+      const cur = { ...rerollNicknameWord(prev.cur, a.wordIndex), _t: a.ts, _wordIndex: a.wordIndex }
+      const hist = [{ num: cur.sealNum ?? cur.num, plain: cur.plain, source: 'draw', ts: a.ts, segments: cur.segments }, ...prev.hist]
+      return { ...s, slots: { ...s.slots, [k]: { cur, hist } } }
+    }
+    case 'manualWord': {
+      const k = id(a.stepN, a.slot.k)
+      const prev = s.slots[k] || { hist: [] }
+      if (a.slot.kind !== 'nickname') return s
+      const cur = { ...manualNicknameWord(prev.cur, a.wordIndex, a.text), _t: a.ts, _wordIndex: a.wordIndex }
+      const hist = [{ num: cur.sealNum ?? cur.num, plain: cur.plain, source: 'draw', ts: a.ts, segments: cur.segments }, ...prev.hist]
+      return { ...s, slots: { ...s.slots, [k]: { cur, hist } } }
+    }
     case 'setSlots':
       return { ...s, slots: a.slots, ...(a.view ? { view: a.view } : {}) }
     default: return s
@@ -46,7 +62,7 @@ function rollEverything(ts) {
     const res = { ...roll(sl), _t: ts }
     slots[id(step.n, sl.k)] = {
       cur: res,
-      hist: [{ num: res.sealNum ?? res.num, plain: res.plain, source: 'draw', ts }],
+      hist: [{ num: res.sealNum ?? res.num, plain: res.plain, source: 'draw', ts, ...(res.segments ? { segments: res.segments } : {}) }],
     }
   }))
   return slots

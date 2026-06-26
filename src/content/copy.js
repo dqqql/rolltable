@@ -6,18 +6,18 @@ export const APP_COPY = {
   folio: {
     home: '第零场 · 工具',
     lookup: '速查',
-    summary: '结账 · 友谊账单',
+    summary: '结账',
     flow: (step, total) => `第 ${step.n} / ${total} 栏`,
   },
 }
 
 export const HOME_COPY = {
   hero: {
-    title: '今晚的酒钱，记在友谊头上。',
+    title: '酒钱记在友谊头上。',
     paragraphs: [
       '  使用本书没有固定的规则。你可以使用全部或部分的表格。你可以使用它们一次或多次。好吧，也许有一条规则……不，两条规则：一、让玩家来掷骰子，最好是实体的真骰子。这是属于他们的故事。二、相信骰子，遵从骰子。',
     ],
-    byline: '—— 翻开账册，开始今晚的旅程',
+    byline: '—— 开始今晚的旅程',
   },
   seal: { num: '', die: '' },
   cards: [
@@ -29,11 +29,11 @@ export const HOME_COPY = {
 
 export const FLOW_COPY = {
   history: {
-    title: '赊账栏',
+    title: '历史记录',
     meta: '',
     emptyTop: '还没盖印。',
     emptyBottom: '砸一枚试试。',
-    reuseTitle: '点一下，重新采用这枚',
+    reuseTitle: '重新采用这枚',
   },
   guideLabel: stepNum => `原文引导 · 第 ${stepNum} 步`,
   blankStep: '准备工作结束，让我们开始吧！',
@@ -45,14 +45,17 @@ export const FLOW_COPY = {
   slot: {
     emptySeal: '待盖印',
     redraw: '↻ 重新砸印',
-    draw: die => `砸下骰印 · ${die}`,
+    draw: die => `砸印 · ${die}`,
+    nicknamePart: index => `队名第 ${index} 段`,
+    nicknameWordEmpty: index => `掷出第 ${index} 段`,
+    nicknamePreviewEmpty: '三段都落定后，这里会合成队名。',
     manualToggle: '✎ 手填',
     manualPlaceholder: '自己写一条，回车记账…',
     manualSubmit: '记上',
   },
   result: {
     manualTag: '— 手填',
-    wordsOnlyHint: '对三个主题词进行再创作，而非简单的拼接！',
+    wordsOnlyHint: '对三个主题词进行再创作，而非简单的拼接。',
   },
 }
 
@@ -62,7 +65,7 @@ export const SUMMARY_COPY = {
     busy: '正在出票…',
     success: '账单已导出 ✓',
     error: '导出失败，请重试',
-    filename: '你是我的好朋友-友谊账单.png',
+    filename: '友谊账单.png',
   },
   actions: {
     revise: '← 逐栏修改',
@@ -70,11 +73,11 @@ export const SUMMARY_COPY = {
   },
   bill: {
     kicker: 'YOU ARE MY GOOD FRIEND · THE TAB',
-    title: '友谊赊账单',
+    title: '账单',
     fallbackSummary: '一伙人的共同往事',
     teamSummary: teamName => `「${teamName}」一伙的共同往事`,
     emptyValue: '（未抽取）',
-    emptyState: '账上还是空的——先去掷几把骰。',
+    emptyState: '账上还是空的——先去掷骰。',
     footer: '这不是永别 · 你是我的好朋友',
     manualTag: ' · 手填',
   },
@@ -183,5 +186,6 @@ export const TABLES_COPY = {
   result: {
     manualNum: '填',
     nicknameSeal: '队',
+    nicknamePendingNum: '—',
   },
 }

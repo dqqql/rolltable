@@ -12,23 +12,86 @@ export const STEPS = TABLES_COPY.steps
 export const LOOKUP = TABLES_COPY.lookup
 
 export const rand = n => Math.floor(Math.random() * n)
+const NICKNAME_KEYS = ['a', 'b', 'c']
 
 export function roll(slot) {
   if (slot.die === '3d100') {
-    const a = DATA.nickname
-    return buildResult(slot, { ia: rand(a.length), ib: rand(a.length), ic: rand(a.length) })
+    return buildNicknameResult(NICKNAME_KEYS.map(() => ({ kind: 'draw', roll: rand(DATA.nickname.length) })))
   }
   return buildResult(slot, rand(DATA[slot.t].length))
 }
 
+export function rerollNicknameWord(cur, wordIndex) {
+  const segments = cloneNicknameSegments(cur?.segments)
+  if (!NICKNAME_KEYS[wordIndex]) return cur || buildNicknameResult(segments)
+  segments[wordIndex] = { kind: 'draw', roll: rand(DATA.nickname.length) }
+  return buildNicknameResult(segments)
+}
+
+export function manualNicknameWord(cur, wordIndex, text) {
+  const segments = cloneNicknameSegments(cur?.segments)
+  if (!NICKNAME_KEYS[wordIndex]) return cur || buildNicknameResult(segments)
+  segments[wordIndex] = text ? { kind: 'manual', text } : null
+  return buildNicknameResult(segments)
+}
+
+function cloneNicknameSegments(segments) {
+  return NICKNAME_KEYS.map((_, i) => {
+    const seg = segments?.[i]
+    if (!seg) return null
+    return seg.kind === 'manual' ? { kind: 'manual', text: seg.text } : { kind: 'draw', roll: seg.roll }
+  })
+}
+
+function buildNicknameResult(segmentsInput) {
+  const segments = cloneNicknameSegments(segmentsInput)
+  const cn = s => String(s).split('(')[0].replace(/\s+$/, '').trim()
+  const words = ['', '', '']
+  const rolls = [null, null, null]
+  const segmentNums = [null, null, null]
+  const segmentSources = [null, null, null]
+
+  segments.forEach((seg, i) => {
+    if (!seg) return
+    if (seg.kind === 'manual') {
+      const text = String(seg.text || '').trim()
+      if (!text) return
+      words[i] = text
+      segmentNums[i] = TABLES_COPY.result.manualNum
+      segmentSources[i] = 'manual'
+      return
+    }
+    const roll = seg.roll
+    if (typeof roll !== 'number') return
+    const word = DATA.nickname[roll]?.[NICKNAME_KEYS[i]]
+    if (!word) return
+    words[i] = word
+    rolls[i] = roll
+    segmentNums[i] = roll + 1
+    segmentSources[i] = 'draw'
+  })
+
+  const name = words.filter(Boolean).map(cn).join('·')
+  return {
+    source: segmentSources.some(s => s === 'manual') ? 'manual' : 'draw',
+    num: segmentNums.map(n => n ?? TABLES_COPY.result.nicknamePendingNum).join('/'),
+    sealNum: TABLES_COPY.result.nicknameSeal,
+    words,
+    rolls,
+    segmentNums,
+    segmentSources,
+    segments,
+    name,
+    title: name,
+    plain: name ? '「' + name + '」' : '',
+    wordsOnly: true,
+    complete: words.every(Boolean),
+  }
+}
+
 export function buildResult(slot, idx) {
   if (slot.kind === 'nickname') {
-    const a = DATA.nickname, { ia, ib, ic } = idx
-    const cn = s => s.split('(')[0].replace(/\s+$/, '').trim()
-    const wa = a[ia].a, wb = a[ib].b, wc = a[ic].c
-    const name = cn(wa) + '·' + cn(wb) + '·' + cn(wc)
-    return { source: 'draw', num: `${ia + 1}/${ib + 1}/${ic + 1}`, sealNum: TABLES_COPY.result.nicknameSeal,
-      words: [wa, wb, wc], name, title: name, plain: '「' + name + '」', wordsOnly: true }
+    return buildNicknameResult(idx)
   }
   const e = DATA[slot.t][idx], num = idx + 1
   switch (slot.kind) {
@@ -52,8 +115,11 @@ export function buildResult(slot, idx) {
 
 // 重新采用一枚历史骰印：按 plain 文本回查完整结果
 export function readopt(slot, hist) {
+  if (slot.kind === 'nickname' && hist.segments?.length === 3) {
+    return buildNicknameResult(hist.segments)
+  }
   const arr = DATA[slot.t]
-  if (arr && slot.kind !== 'nickname') {
+  if (arr) {
     for (let i = 0; i < arr.length; i++) {
       const r = buildResult(slot, i)
       if (r.plain === hist.plain) return r

@@ -123,7 +123,8 @@ button{font-family:inherit}
   background:linear-gradient(0deg, rgba(255,255,255,.18), rgba(255,255,255,.30));box-shadow:var(--shadow)}
 .slot-head{display:flex;justify-content:space-between;align-items:center;padding:10px 16px;border-bottom:1px solid var(--rule);
   font-family:var(--f-num);font-size:12px;letter-spacing:.08em;color:var(--ink-soft)}
-.slot-head .lab{color:var(--wax);font-weight:500}
+.slot-head .lab{color:var(--wax);font-family:var(--f-disp);font-weight:700;font-size:clamp(18px,2.8vw,24px);letter-spacing:.02em;line-height:1.2}
+.slot-head .die-tag{font-size:13px;letter-spacing:.12em}
 .stage{display:grid;grid-template-columns:auto 1fr;gap:22px;align-items:center;padding:22px 18px}
 .stage.empty{opacity:1}
 .result .group{font-family:var(--f-num);font-size:11px;letter-spacing:.12em;color:var(--wax);text-transform:uppercase;margin-bottom:3px}
@@ -148,6 +149,10 @@ button{font-family:inherit}
 .manual{display:flex;gap:8px;width:100%;flex-basis:100%;margin-top:4px}
 .manual input{flex:1;font-family:var(--f-body);font-size:15px;padding:9px 12px;border:1px solid var(--rule-strong);border-radius:3px;background:rgba(255,255,255,.5);color:var(--ink)}
 .manual input:focus{outline:2px solid var(--wax);outline-offset:1px}
+.nickname-stack{display:flex;flex-direction:column;gap:0}
+.nickname-preview{border:1px dashed var(--rule-strong);border-radius:6px;padding:18px 20px;background:rgba(255,255,255,.2);margin:-4px 0 18px}
+.nickname-preview-label{font-family:var(--f-num);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:8px}
+.nickname-preview .rttl{margin:0 0 6px}
 .flow-nav{display:flex;justify-content:space-between;align-items:center;margin-top:30px;border-top:2px solid var(--ink);padding-top:18px}
 
 /* ---------- LOOKUP (card wall + modal) ---------- */
