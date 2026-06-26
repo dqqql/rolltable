@@ -140,6 +140,7 @@ export default function Summary({ slots, dispatch, onView, onStep }) {
         <button className="btn cast" onClick={exportImage} disabled={busy}>{busy ? SUMMARY_COPY.export.busy : SUMMARY_COPY.export.idle}</button>
         <button className="btn ghost" onClick={() => onStep(0)}>{SUMMARY_COPY.actions.revise}</button>
         <button className="btn ghost" onClick={() => dispatch({ type: 'rollAllStay', ts: Date.now() })}>{SUMMARY_COPY.actions.reroll}</button>
+        <button className="btn ghost" onClick={() => dispatch({ type: 'clearAll' })}>{SUMMARY_COPY.actions.clear}</button>
       </div>
 
       <div className="bill" ref={billRef}>

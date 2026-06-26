@@ -31,8 +31,8 @@ export const FLOW_COPY = {
   history: {
     title: '历史记录',
     meta: '',
-    emptyTop: '还没盖印。',
-    emptyBottom: '砸一枚试试。',
+    emptyTop: '还没盖章。',
+    emptyBottom: '盖一枚试试。',
     reuseTitle: '重新采用这枚',
   },
   guideLabel: stepNum => `原文引导 · 第 ${stepNum} 步`,
@@ -43,9 +43,9 @@ export const FLOW_COPY = {
     summary: '结账 · 查看总表 →',
   },
   slot: {
-    emptySeal: '待盖印',
-    redraw: '↻ 重新砸印',
-    draw: die => `砸印 · ${die}`,
+    emptySeal: '待盖章',
+    redraw: '↻ 重新盖章',
+    draw: die => `盖章 · ${die}`,
     nicknamePart: index => `队名第 ${index} 段`,
     nicknameWordEmpty: index => `掷出第 ${index} 段`,
     nicknamePreviewEmpty: '三段都落定后，这里会合成队名。',
@@ -70,6 +70,7 @@ export const SUMMARY_COPY = {
   actions: {
     revise: '← 逐栏修改',
     reroll: '↻ 全部重抽',
+    clear: '✕ 清除全部',
   },
   bill: {
     kicker: 'YOU ARE MY GOOD FRIEND · THE TAB',

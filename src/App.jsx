@@ -52,6 +52,8 @@ function reducer(s, a) {
     }
     case 'setSlots':
       return { ...s, slots: a.slots, ...(a.view ? { view: a.view } : {}) }
+    case 'clearAll':
+      return { ...s, slots: {} }
     default: return s
   }
 }
